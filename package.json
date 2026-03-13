@@ -1,7 +1,7 @@
 {
   "name": "iobroker.volvocvapi_xc60",
-  "version": "0.2.0",
-  "description": "Starter adapter for Volvo Connected Vehicle, Energy and Location APIs",
+  "version": "0.3.0",
+  "description": "ioBroker adapter for Volvo Connected Vehicle, Energy and Location APIs",
   "author": "OpenAI",
   "license": "MIT",
   "main": "main.js",
@@ -10,8 +10,13 @@
     "volvo",
     "connected vehicle",
     "energy",
-    "location"
+    "location",
+    "xc60"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sezme2022/ioBroker.volvocvapi_xc60.git"
+  },
   "dependencies": {
     "@iobroker/adapter-core": "^3.2.3",
     "axios": "^1.8.4"

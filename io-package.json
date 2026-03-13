@@ -1,20 +1,20 @@
 {
   "common": {
     "name": "volvocvapi_xc60",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "news": {
-      "0.2.0": {
-        "en": "Extended starter adapter with Connected Vehicle, Energy and Location polling plus command discovery.",
-        "de": "Erweiterter Starter-Adapter mit Connected-Vehicle-, Energy- und Location-Polling sowie Command-Discovery."
+      "0.3.0": {
+        "en": "Added complete admin configuration, better logging, VIN auto-detection, polling groups and command states.",
+        "de": "Vollständige Admin-Konfiguration, besseres Logging, VIN-Autodetect, Polling-Gruppen und Command-States ergänzt."
       }
     },
     "titleLang": {
-      "en": "Volvo Connected Vehicle API (starter)",
-      "de": "Volvo Connected Vehicle API (Starter)"
+      "en": "Volvo Connected Vehicle API",
+      "de": "Volvo Connected Vehicle API"
     },
     "desc": {
-      "en": "Starter adapter for Volvo official APIs",
-      "de": "Starter-Adapter f\u00fcr offizielle Volvo-APIs"
+      "en": "Reads Volvo Connected Vehicle, Energy and Location data into ioBroker and exposes vehicle commands.",
+      "de": "Liest Volvo Connected Vehicle-, Energy- und Location-Daten in ioBroker ein und stellt Fahrzeugbefehle bereit."
     },
     "authors": [
       "OpenAI"
@@ -28,7 +28,7 @@
     "icon": "volvo.png",
     "enabled": true,
     "extIcon": "",
-    "readme": "https://developer.volvocars.com/apis/connected-vehicle/v2/overview/",
+    "readme": "https://github.com/sezme2022/ioBroker.volvocvapi_xc60",
     "type": "vehicle",
     "compact": true,
     "connectionType": "cloud",
@@ -60,9 +60,10 @@
     "pollIntervalSec": 300,
     "slowCycleCount": 12,
     "engineStartRuntimeMinutes": 10,
-    "includeRawJson": true,
+    "includeRawJson": false,
     "enableEnergy": true,
-    "enableLocation": true
+    "enableLocation": true,
+    "enableDebug": false
   },
   "objects": [],
   "instanceObjects": []

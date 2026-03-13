@@ -1,281 +1,167 @@
 # ioBroker.volvocvapi_xc60
 
-ioBroker-Starteradapter für die **offizielle Volvo Connected Vehicle API**, die **Energy API** und die **Location API**.
+Ein eigener ioBroker-Adapter für die **Volvo Connected Vehicle API**, **Energy API** und **Location API**.
 
-Der Adapter ist auf einen **Volvo XC60 Plug-in-Hybrid ab Modelljahr 2022** ausgelegt und wurde insbesondere für den Anwendungsfall **XC60, Baujahr 2024** vorbereitet. Er liest sinnvolle Fahrzeugdaten in ioBroker ein und stellt optionale Befehle als States bereit.
+Der Adapter ist für deinen **Volvo XC60 Plug-in-Hybrid, Baujahr 2024** vorbereitet, funktioniert aber grundsätzlich auch für andere kompatible Volvo-Modelle, sofern die entsprechenden Volvo-APIs und Scopes verfügbar sind.
 
-## Status
+## Enthaltene Funktionen
 
-Dies ist ein **entwicklernaher Starteradapter** und **kein fertiger ioBroker-Store-Release**.
+- Kilometerstand / Odometer
+- Tankdaten und, falls verfügbar, Batterie-/Hybriddaten
+- Türen, Fenster, Warnungen, Reifendruck, Bremsstatus, Diagnosedaten
+- Energy State für PHEV/EV
+- Standortdaten
+- verfügbare Commands aus der API
+- Command-Buttons für Lock, Unlock, Honk, Flash, Klimatisierung und mehr
+- 5-Minuten-Polling als sinnvoller Standard
+- langsame Endpunkte nur in größeren Abständen
 
-Er ist dafür gedacht,
-- im eigenen GitHub-Repository gepflegt zu werden,
-- direkt per GitHub-Link in ioBroker installiert zu werden,
-- und anschließend mit echten Volvo-API-Zugangsdaten produktiv getestet und weiter verfeinert zu werden.
+## Konfiguration in ioBroker
 
-## Unterstützte Volvo-APIs
+### API / Auth
 
-- **Connected Vehicle API v2**
-- **Energy API v2**
-- **Location API v1**
+- **VCC API Key**: Pflichtfeld für API-Zugriffe
+- **Client ID / Client Secret**: für OAuth und Refresh
+- **Access Token**: nur für schnelle Tests
+- **Refresh Token**: empfohlen für Dauerbetrieb
+- **Authorization Code / Redirect URI / code_verifier**: optional für einmaligen Code-Tausch
 
-## Funktionsumfang
+### Fahrzeug / Polling
 
-Der Adapter kann – abhängig von Fahrzeug, API-Freigaben und Scopes – unter anderem folgende Daten abrufen:
+- **VIN**: optional, wird sonst automatisch aus `/vehicles` ermittelt
+- **Polling-Intervall**: Standard 300 Sekunden
+- **Langsame Endpunkte jede N-te Runde**: Standard 12
+- **Energy API aktivieren**
+- **Location API aktivieren**
+- **Raw JSON speichern**
+- **Debug-Logging aktivieren**
 
-- Kilometerstand / **Odometer**
-- Tankfüllstand / Kraftstoffdaten
-- Batterie-Ladestand bei PHEV/EV
-- Reichweite / Distance to Empty
-- Türstatus / Zentralverriegelung
-- Fensterstatus
-- Motorstatus
-- Warnungen / Warnings
-- Bremsflüssigkeitsstatus
-- Reifendruck / Tyres
-- Diagnoseinformationen
-- Statistikdaten
-- aktuelle Fahrzeugposition
-- Energy State / Ladeinformationen
-- verfügbare Fahrzeugbefehle über `/commands`
+## Empfohlene Startwerte
 
-Zusätzlich werden Befehls-States angelegt, z. B. für:
+- Polling: **300 Sekunden**
+- Slow cycle: **12**
+- Energy API: **aktiv**
+- Location API: **aktiv**
+- Raw JSON: **aus**, außer zum Testen
+- Debug: **aus**, außer zur Fehlersuche
 
-- Verriegeln / Entriegeln
-- Hupen
-- Blinken
-- Hupen + Blinken
-- Klimatisierung Start / Stop
-- Motor Start / Stop
-
-## Polling-Strategie
-
-Damit die Volvo-Rate-Limits nicht unnötig belastet werden, arbeitet der Adapter mit zwei Zyklen:
-
-- **schnelle Endpunkte**: standardmäßig alle **300 Sekunden**
-- **langsame Endpunkte**: standardmäßig nur jede **12. Runde**
-
-Das entspricht ungefähr:
-- Standard-Polling: **alle 5 Minuten**
-- seltenere Endpunkte: ungefähr **stündlich**
-
-Diese Werte können in der Adapter-Konfiguration geändert werden.
-
-## Wichtige Datenpunkte
-
-Beispielhafte State-Pfade:
-
-- `connected.vehicle.odometer`
-- `connected.vehicle.fuel.fuelAmount`
-- `connected.vehicle.fuel.batteryChargeLevel`
-- `connected.vehicle.doors.centralLock`
-- `connected.vehicle.statistics.distanceToEmpty`
-- `connected.vehicle.windows.*`
-- `connected.vehicle.tyres.*`
-- `connected.vehicle.diagnostics.*`
-- `energy.vehicle.state.*`
-- `location.vehicle.location.*`
-- `availableCommands.*`
-- `commands.lock`
-- `commands.unlock`
-- `commands.climatizationStart`
-
-Je nach Fahrzeugkonfiguration, API-Freigaben und Scope können einzelne Pfade fehlen oder zusätzliche Pfade erscheinen.
-
-## Voraussetzungen
-
-Für den produktiven Betrieb brauchst du in der Regel:
-
-- einen **Volvo Developer Account**
-- einen **VCC API Key**
-- **OAuth2-Zugangsdaten**
-  - `clientId`
-  - `clientSecret`
-- mindestens einen gültigen Token-Stand
-  - `accessToken` oder besser
-  - `refreshToken`
-- optional:
-  - `redirectUri`
-  - `authCode`
-  - `codeVerifier` (für PKCE)
-
-## Authentifizierungsmodi
-
-Der Adapter unterstützt derzeit drei praktische Wege:
-
-### 1. Access Token direkt eintragen
-Schnell zum Testen, aber nicht dauerhaft praktikabel, da das Token abläuft.
-
-### 2. Refresh Token + Client ID + Client Secret
-Empfohlener Weg für den laufenden Betrieb. Der Adapter erneuert den Access Token während der Laufzeit automatisch.
-
-### 3. Einmaliger Authorization-Code-Tausch
-Wenn du den Volvo-OAuth-Flow bereits extern durchgeführt hast, kann der Code gegen Tokens eingetauscht werden.
-
-## Wichtiger Hinweis zu Refresh Tokens
-
-Volvo verwendet **Refresh-Token-Rotation**. Der Adapter kann aktualisierte Tokens zur Laufzeit weiterverwenden, speichert diese aber in dieser Starterversion noch nicht vollständig robust für alle Neustart-Szenarien weg.
-
-Für produktiven 24/7-Betrieb sollte die Token-Persistenz noch weiter abgesichert werden.
-
-## Adapter-Konfiguration
-
-Die wichtigsten Konfigurationsfelder in `native`:
-
-- `apiKey`
-- `clientId`
-- `clientSecret`
-- `accessToken`
-- `refreshToken`
-- `authCode`
-- `redirectUri`
-- `codeVerifier`
-- `vin`
-- `pollIntervalSec`
-- `slowCycleCount`
-- `engineStartRuntimeMinutes`
-- `includeRawJson`
-- `enableEnergy`
-- `enableLocation`
-
-Empfohlene Startwerte:
-
-- `pollIntervalSec = 300`
-- `slowCycleCount = 12`
-- `enableEnergy = true`
-- `enableLocation = true`
-
-## GitHub-Repository anlegen
-
-Empfohlener Repository-Name:
-
-```text
-sezme2022/iobroker.volvocvapi_xc60
-```
-
-Natürlich kannst du auch einen anderen Namen verwenden, solltest dann aber Paketnamen und Doku konsistent halten.
-
-## Dateien ins Repository hochladen
-
-Lade **den entpackten Projektinhalt** hoch, nicht die ZIP-Datei selbst.
-
-Erwartete Struktur:
+## Projektstruktur
 
 ```text
 admin/
   jsonConfig.json
+lib/
+  endpoints.js
+  helpers.js
 io-package.json
 main.js
 package.json
 README.md
+LICENSE
+.gitignore
+volvo.png
 ```
 
-## Git-Befehle für den ersten Upload
+## GitHub für Einsteiger: so arbeitest du damit
 
-Im Projektordner lokal ausführen:
+### 1. Repository lokal vorbereiten
+
+Entpacke den Ordner lokal auf deinem Mac und öffne das Terminal **im Projektordner**.
+
+### 2. Erstes Hochladen nach GitHub
+
+Falls dein Repository schon existiert, verwende diese Befehle:
 
 ```bash
 git init
 git branch -M main
-git remote add origin https://github.com/sezme2022/iobroker.volvocvapi_xc60.git
+git remote remove origin 2>/dev/null || true
+git remote add origin https://github.com/sezme2022/ioBroker.volvocvapi_xc60.git
 git add .
-git commit -m "Initial commit for Volvo XC60 Connected Vehicle adapter"
+git commit -m "Version 0.3.0 - complete adapter structure"
 git push -u origin main
 ```
 
-## Installation direkt aus GitHub in ioBroker
+### 3. Spätere Änderungen versionieren
 
-Auf dem ioBroker-Host:
-
-```bash
-iobroker url "https://github.com/sezme2022/iobroker.volvocvapi_xc60.git"
-```
-
-Falls nötig alternativ ohne `.git`:
+Wenn du später einzelne Dateien änderst, reicht immer:
 
 ```bash
-iobroker url "https://github.com/sezme2022/iobroker.volvocvapi_xc60"
+git add .
+git commit -m "Kurze Beschreibung der Änderung"
+git push
 ```
 
-## Alternative Installation per npm
+### 4. GitHub im Browser prüfen
+
+Nach dem Push solltest du im Repository direkt alle Dateien sehen. Wichtig sind besonders:
+
+- `package.json`
+- `io-package.json`
+- `main.js`
+- `admin/jsonConfig.json`
+
+## Installation in ioBroker aus GitHub
+
+Wenn das Repository aktualisiert ist, kannst du den Adapter in ioBroker wieder direkt aus GitHub installieren bzw. aktualisieren:
 
 ```bash
-cd /opt/iobroker
-npm install https://github.com/sezme2022/iobroker.volvocvapi_xc60.git --omit=dev
-iobroker upload all
-iobroker restart
+iobroker url https://github.com/sezme2022/ioBroker.volvocvapi_xc60.git --host 7f8a445c808d
 ```
 
-## Adapterinstanz anlegen
+Wenn bereits eine ältere Version installiert ist, kannst du nach dem neuen Push einfach denselben Befehl erneut ausführen.
 
-Nach der Installation in der ioBroker-Admin-Oberfläche:
+## Alternative: nur einzelne Dateien austauschen
 
-1. Adapter suchen
-2. Instanz anlegen
-3. Volvo-Zugangsdaten eintragen
-4. Polling-Intervall auf 300 Sekunden belassen
-5. Logs prüfen
+Wenn du nicht sofort mit Git arbeiten willst, kannst du auch nur diese Dateien ersetzen:
 
-## Empfohlene erste Tests
+- `main.js`
+- `io-package.json`
+- `package.json`
+- `admin/jsonConfig.json`
+- optional den ganzen `lib`-Ordner
 
-Nach dem ersten Start prüfen:
+Danach den Adapter erneut aus GitHub installieren oder lokal neu deployen.
 
-- wird die VIN erkannt oder korrekt verwendet?
-- werden Grunddaten wie Kilometerstand und Türen gelesen?
-- kommen Energy-Daten beim XC60 PHEV an?
-- ist die Position verfügbar?
-- werden verfügbare Commands sauber erkannt?
-- funktionieren einzelne Commands nur dann, wenn sie im Fahrzeug wirklich freigegeben sind?
+## Wichtiger Hinweis zu Docker
 
-## Troubleshooting
+In deinem Docker-Setup solltest du **nicht** `iobroker upload all` verwenden. Die Installation über GitHub oder eine saubere lokale Installation ist in deinem Fall der bessere Weg.
 
-### Adapter startet, aber keine Daten
-Prüfen:
-- `apiKey` korrekt?
-- `clientId` / `clientSecret` korrekt?
-- Token gültig?
-- ausreichende Scopes erteilt?
-- VIN korrekt?
+## Typischer Testablauf nach der Installation
 
-### Login oder Token Refresh schlägt fehl
-Prüfen:
-- OAuth-Client korrekt angelegt?
-- Redirect URI korrekt?
-- Refresh Token noch gültig?
-- PKCE / `codeVerifier` korrekt, falls verwendet?
+1. Instanz anlegen
+2. Zugangsdaten eintragen
+3. speichern
+4. Instanz starten
+5. Log prüfen
+6. States unter `volvocvapi_xc60.0.*` kontrollieren
 
-### Einzelne Datenpunkte fehlen
-Das ist nicht ungewöhnlich. Nicht jedes Fahrzeug liefert alle Endpunkte oder Felder. Manche Werte hängen von:
-- Modell
-- Baujahr
-- Region
-- Softwarestand
-- API-Freigabe
-- gewählten Scopes
-ab.
+## Typische State-Bereiche
 
-### Commands erscheinen, funktionieren aber nicht
-Mögliche Ursachen:
-- Fahrzeugzustand erlaubt den Command gerade nicht
-- Volvo gibt den Command für das Fahrzeug nicht frei
-- fehlende Berechtigung / Scope
-- temporäre API-Einschränkung
+- `volvocvapi_xc60.0.info.*`
+- `volvocvapi_xc60.0.connected.*`
+- `volvocvapi_xc60.0.energy.*`
+- `volvocvapi_xc60.0.location.*`
+- `volvocvapi_xc60.0.commands.*`
+- `volvocvapi_xc60.0.availableCommands.*`
+- `volvocvapi_xc60.0.commandsLastResult.*`
 
-## Weiterentwicklung
+## Wenn du manuell Dateien austauschen willst
 
-Sinnvolle nächste Ausbaustufen:
+### Nur im GitHub-Repository im Browser
 
-- dauerhafte sichere Speicherung rotierender Refresh Tokens
-- sauberere Capability-Erkennung je Endpoint
-- differenziertere State-Typisierung
-- bessere Fehlerbehandlung und Retry-Logik
-- optionales manuelles Refresh / Reconnect-State
-- VIS-/Lovelace-freundliche zusammengefasste Status-States
+1. Repository öffnen
+2. Datei anklicken
+3. Stift-Symbol wählen
+4. Inhalt ersetzen
+5. unten `Commit changes`
 
-## Lizenz
+Das geht auch ohne lokale Git-Kenntnisse. Für mehrere Dateien ist Upload per Browser ebenfalls möglich.
 
-MIT
+## Nächste sinnvolle Ausbaustufen
 
-## Hinweis
-
-
+- Token-Persistenz robuster speichern
+- bessere Scope-/Capability-Erkennung
+- hübschere Rollen / Einheitentypen für einzelne States
+- optionaler Button für geführten OAuth-Hinweis
+- eventuell separate Channels für Hybrid-/EV-spezifische Daten
