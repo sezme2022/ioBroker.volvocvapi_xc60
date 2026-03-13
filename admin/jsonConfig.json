@@ -1,77 +1,154 @@
 {
+  "i18n": true,
   "type": "tabs",
   "items": {
-    "api": {
-      "label": "API / Auth",
+    "setup": {
+      "label": "Einrichtung / Hilfe",
       "items": {
         "intro": {
           "type": "staticText",
-          "text": "Bitte Volvo-Zugangsdaten und API-Daten eintragen. Für den Dauerbetrieb ist Refresh Token + Client ID + Client Secret der empfohlene Weg.",
+          "text": "Dieser Adapter benötigt Zugangsdaten aus dem Volvo Developer Portal. Client ID und Client Secret werden nicht im Adapter erzeugt, sondern im Volvo Developer Portal für eine registrierte Anwendung bereitgestellt.",
+          "newLine": true
+        },
+        "step1": {
+          "type": "staticText",
+          "text": "Schritt 1: Volvo Developer Portal öffnen und eine Anwendung für die Connected Vehicle API anlegen.",
+          "newLine": true
+        },
+        "portalLink": {
+          "type": "staticLink",
+          "text": "Volvo Developer Portal öffnen",
+          "href": "https://developer.volvocars.com/",
+          "button": true,
+          "newLine": true
+        },
+        "step2": {
+          "type": "staticText",
+          "text": "Schritt 2: Nach der App-Registrierung den VCC API Key, die Client ID und das Client Secret aus dem Portal übernehmen.",
+          "newLine": true
+        },
+        "step3": {
+          "type": "staticText",
+          "text": "Schritt 3: Für den Dauerbetrieb zusätzlich einen Refresh Token beschaffen. Der empfohlene Weg ist: API Key + Client ID + Client Secret + Refresh Token.",
+          "newLine": true
+        },
+        "step4": {
+          "type": "staticText",
+          "text": "Schritt 4: Diese Werte in die Felder auf der Registerkarte 'API / Auth' eintragen, speichern und die Instanz starten.",
+          "newLine": true
+        },
+        "docsLink": {
+          "type": "staticLink",
+          "text": "Volvo API Dokumentation öffnen",
+          "href": "https://developer.volvocars.com/apis/connected-vehicle/v2/overview/",
+          "button": true,
+          "newLine": true
+        },
+        "oauthHint": {
+          "type": "staticText",
+          "text": "Hinweis: Ein echter OAuth-Login-Button mit automatischem Token-Austausch ist in dieser Version noch nicht implementiert. Client ID, Client Secret und Tokens müssen aktuell manuell aus dem Volvo-Portal bzw. dem eigenen OAuth-Prozess übernommen werden.",
+          "newLine": true
+        }
+      }
+    },
+    "api": {
+      "label": "API / Auth",
+      "items": {
+        "apiInfo": {
+          "type": "staticText",
+          "text": "Für den Dauerbetrieb werden in der Regel API Key, Client ID, Client Secret und Refresh Token benötigt. Ein Access Token ist nur für kurze Tests geeignet.",
           "newLine": true
         },
         "apiKey": {
           "type": "text",
-          "label": "VCC API Key"
+          "label": "VCC API Key",
+          "help": "API Key aus dem Volvo Developer Portal. Dieser Schlüssel wird für API-Aufrufe benötigt."
         },
         "clientId": {
           "type": "text",
-          "label": "Client ID"
+          "label": "Client ID",
+          "help": "Client ID der im Volvo Developer Portal registrierten Anwendung."
         },
         "clientSecret": {
           "type": "password",
-          "label": "Client Secret"
+          "label": "Client Secret",
+          "help": "Client Secret der im Volvo Developer Portal registrierten Anwendung."
         },
         "refreshToken": {
           "type": "password",
-          "label": "Refresh Token"
+          "label": "Refresh Token",
+          "help": "Empfohlener Wert für den Dauerbetrieb. Mit dem Refresh Token kann der Adapter automatisch neue Access Tokens anfordern."
         },
         "accessToken": {
           "type": "password",
-          "label": "Access Token (optional)"
+          "label": "Access Token (optional)",
+          "help": "Temporärer Zugriffstoken für Tests. Läuft nach kurzer Zeit ab und ist nicht für den Dauerbetrieb empfohlen."
+        },
+        "authCode": {
+          "type": "password",
+          "label": "Authorization Code (optional)",
+          "help": "Optionaler einmaliger OAuth-Code für spätere Erweiterungen oder manuelle Token-Prozesse."
+        },
+        "redirectUri": {
+          "type": "text",
+          "label": "Redirect URI (optional)",
+          "help": "Muss zur Redirect URI in der Volvo App-Registrierung passen, falls ein OAuth-Code-Flow verwendet wird."
+        },
+        "codeVerifier": {
+          "type": "password",
+          "label": "PKCE code_verifier (optional)",
+          "help": "Nur erforderlich, wenn der verwendete Volvo OAuth-Prozess PKCE nutzt."
         }
       }
     },
-
     "vehicle": {
-      "label": "Fahrzeug",
+      "label": "Fahrzeug / Polling",
       "items": {
         "vin": {
           "type": "text",
-          "label": "Vehicle VIN"
+          "label": "VIN",
+          "help": "Optional. Wenn leer, versucht der Adapter die VIN automatisch über die API zu ermitteln."
         },
         "pollIntervalSec": {
           "type": "number",
-          "label": "Polling Intervall (Sekunden)",
+          "label": "Polling-Intervall in Sekunden",
+          "help": "Empfohlener Startwert: 300 Sekunden.",
           "min": 60,
           "max": 3600
         },
         "slowCycleCount": {
           "type": "number",
           "label": "Langsame Endpunkte nur jede N-te Runde",
+          "help": "Beispiel: 12 bedeutet bei 300 Sekunden Polling ungefähr stündliche Abfragen für selten benötigte Endpunkte.",
           "min": 1,
           "max": 144
-        }
-      }
-    },
-
-    "options": {
-      "label": "Optionen",
-      "items": {
+        },
+        "engineStartRuntimeMinutes": {
+          "type": "number",
+          "label": "Laufzeit für Engine Start in Minuten",
+          "help": "Nur relevant, wenn das Fahrzeug den Befehl unterstützt.",
+          "min": 1,
+          "max": 60
+        },
         "enableEnergy": {
           "type": "checkbox",
-          "label": "Energy API aktivieren"
+          "label": "Energy API aktivieren",
+          "help": "Liest Lade- und Energiedaten ein, sofern vom Fahrzeug unterstützt."
         },
         "enableLocation": {
           "type": "checkbox",
-          "label": "Location API aktivieren"
+          "label": "Location API aktivieren",
+          "help": "Liest die Fahrzeugposition ein."
         },
         "includeRawJson": {
           "type": "checkbox",
-          "label": "Raw JSON speichern"
+          "label": "Raw JSON speichern",
+          "help": "Speichert komplette API-Antworten zusätzlich als States. Praktisch zur Analyse, erzeugt aber mehr Daten."
         },
         "enableDebug": {
           "type": "checkbox",
-          "label": "Debug Logging aktivieren"
+          "label": "Debug-Logging aktivieren",
+          "help": "Schreibt zusätzliche Diagnosemeldungen ins ioBroker-Log."
         }
       }
     }

@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "volvocvapi_xc60",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "news": {
+      "0.3.1": {
+        "en": "Improved admin configuration with setup/help tab, links and field descriptions.",
+        "de": "Admin-Konfiguration mit Einrichtungs-/Hilfetab, Links und Feldbeschreibungen verbessert."
+      },
       "0.3.0": {
         "en": "Added complete admin configuration, better logging, VIN auto-detection, polling groups and command states.",
         "de": "Vollständige Admin-Konfiguration, besseres Logging, VIN-Autodetect, Polling-Gruppen und Command-States ergänzt."
