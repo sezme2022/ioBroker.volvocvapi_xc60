@@ -1,150 +1,77 @@
 {
-  "i18n": true,
-  "type": "panel",
+  "type": "tabs",
   "items": {
-    "intro": {
-      "type": "staticText",
-      "text": "Bitte Volvo-Zugangsdaten und API-Daten eintragen. Für den Dauerbetrieb ist Refresh-Token + Client ID + Client Secret der empfohlene Weg.",
-      "newLine": true,
-      "sm": 12
-    },
-    "tabs": {
-      "type": "tabs",
+    "api": {
+      "label": "API / Auth",
       "items": {
-        "api": {
-          "label": "API / Auth",
-          "items": {
-            "apiKey": {
-              "type": "text",
-              "label": "VCC API Key",
-              "help": "API-Key aus dem Volvo Developer Portal. Ohne diesen Key schlagen API-Aufrufe fehl.",
-              "sm": 12
-            },
-            "clientId": {
-              "type": "text",
-              "label": "Client ID",
-              "help": "OAuth Client ID aus dem Volvo Developer Portal.",
-              "sm": 6
-            },
-            "clientSecret": {
-              "type": "password",
-              "label": "Client Secret",
-              "help": "OAuth Client Secret aus dem Volvo Developer Portal.",
-              "sm": 6
-            },
-            "accessToken": {
-              "type": "password",
-              "label": "Access Token",
-              "help": "Nur für schnelle Tests. Für den Dauerbetrieb besser Refresh Token verwenden.",
-              "sm": 12
-            },
-            "refreshToken": {
-              "type": "password",
-              "label": "Refresh Token",
-              "help": "Empfohlener Weg für den Dauerbetrieb. Der Adapter erneuert damit das Access Token automatisch.",
-              "sm": 12
-            },
-            "authCode": {
-              "type": "password",
-              "label": "Authorization Code",
-              "help": "Optional: einmaliger OAuth-Code für den Token-Tausch.",
-              "sm": 12
-            },
-            "redirectUri": {
-              "type": "text",
-              "label": "Redirect URI",
-              "help": "Muss zur Volvo-App-Registrierung passen. Nur nötig, wenn ein Authorization Code verwendet wird.",
-              "sm": 8
-            },
-            "codeVerifier": {
-              "type": "password",
-              "label": "PKCE code_verifier",
-              "help": "Nur erforderlich, wenn dein Volvo-OAuth-Flow PKCE nutzt.",
-              "sm": 4
-            }
-          }
+        "intro": {
+          "type": "staticText",
+          "text": "Bitte Volvo-Zugangsdaten und API-Daten eintragen. Für den Dauerbetrieb ist Refresh Token + Client ID + Client Secret der empfohlene Weg.",
+          "newLine": true
         },
-        "vehicle": {
-          "label": "Fahrzeug / Polling",
-          "items": {
-            "vin": {
-              "type": "text",
-              "label": "VIN",
-              "help": "Optional. Wenn leer, versucht der Adapter die VIN automatisch aus /vehicles zu ermitteln.",
-              "sm": 6
-            },
-            "pollIntervalSec": {
-              "type": "number",
-              "label": "Polling-Intervall in Sekunden",
-              "help": "300 Sekunden sind ein sinnvoller Startwert.",
-              "min": 60,
-              "max": 3600,
-              "sm": 3
-            },
-            "slowCycleCount": {
-              "type": "number",
-              "label": "Langsame Endpunkte nur jede N-te Runde",
-              "help": "12 bedeutet: langsame Endpunkte ungefähr stündlich bei 5 Minuten Polling.",
-              "min": 1,
-              "max": 144,
-              "sm": 3
-            },
-            "engineStartRuntimeMinutes": {
-              "type": "number",
-              "label": "Laufzeit für Engine Start in Minuten",
-              "help": "Nur relevant, wenn der entsprechende Fahrzeugbefehl von Volvo unterstützt wird.",
-              "min": 1,
-              "max": 60,
-              "sm": 4
-            },
-            "enableEnergy": {
-              "type": "checkbox",
-              "label": "Energy API aktivieren",
-              "help": "Für PHEV/EV-Daten wie Ladezustand und Energy State.",
-              "sm": 4
-            },
-            "enableLocation": {
-              "type": "checkbox",
-              "label": "Location API aktivieren",
-              "help": "Liest die Fahrzeugposition ein.",
-              "sm": 4
-            },
-            "includeRawJson": {
-              "type": "checkbox",
-              "label": "Raw JSON speichern",
-              "help": "Speichert komplette API-Antworten zusätzlich als JSON-States. Praktisch für Analyse, aber etwas mehr Datenmenge.",
-              "sm": 4
-            },
-            "enableDebug": {
-              "type": "checkbox",
-              "label": "Debug-Logging aktivieren",
-              "help": "Schreibt zusätzliche Diagnosen ins Log.",
-              "sm": 4
-            }
-          }
+        "apiKey": {
+          "type": "text",
+          "label": "VCC API Key"
         },
-        "helpTab": {
-          "label": "Hinweise",
-          "items": {
-            "hint1": {
-              "type": "staticText",
-              "text": "Empfohlene Reihenfolge: 1) API Key eintragen, 2) Client ID und Client Secret eintragen, 3) Refresh Token eintragen, 4) speichern, 5) Instanz starten.",
-              "newLine": true,
-              "sm": 12
-            },
-            "hint2": {
-              "type": "staticText",
-              "text": "Wenn noch kein Refresh Token vorhanden ist, kann testweise auch ein Access Token eingetragen werden. Dieses läuft jedoch ab.",
-              "newLine": true,
-              "sm": 12
-            },
-            "hint3": {
-              "type": "staticText",
-              "text": "Bei leerer VIN versucht der Adapter das erste Fahrzeug der API automatisch zu verwenden.",
-              "newLine": true,
-              "sm": 12
-            }
-          }
+        "clientId": {
+          "type": "text",
+          "label": "Client ID"
+        },
+        "clientSecret": {
+          "type": "password",
+          "label": "Client Secret"
+        },
+        "refreshToken": {
+          "type": "password",
+          "label": "Refresh Token"
+        },
+        "accessToken": {
+          "type": "password",
+          "label": "Access Token (optional)"
+        }
+      }
+    },
+
+    "vehicle": {
+      "label": "Fahrzeug",
+      "items": {
+        "vin": {
+          "type": "text",
+          "label": "Vehicle VIN"
+        },
+        "pollIntervalSec": {
+          "type": "number",
+          "label": "Polling Intervall (Sekunden)",
+          "min": 60,
+          "max": 3600
+        },
+        "slowCycleCount": {
+          "type": "number",
+          "label": "Langsame Endpunkte nur jede N-te Runde",
+          "min": 1,
+          "max": 144
+        }
+      }
+    },
+
+    "options": {
+      "label": "Optionen",
+      "items": {
+        "enableEnergy": {
+          "type": "checkbox",
+          "label": "Energy API aktivieren"
+        },
+        "enableLocation": {
+          "type": "checkbox",
+          "label": "Location API aktivieren"
+        },
+        "includeRawJson": {
+          "type": "checkbox",
+          "label": "Raw JSON speichern"
+        },
+        "enableDebug": {
+          "type": "checkbox",
+          "label": "Debug Logging aktivieren"
         }
       }
     }
