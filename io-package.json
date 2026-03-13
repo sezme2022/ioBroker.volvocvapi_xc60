@@ -1,0 +1,69 @@
+{
+  "common": {
+    "name": "volvocvapi_xc60",
+    "version": "0.2.0",
+    "news": {
+      "0.2.0": {
+        "en": "Extended starter adapter with Connected Vehicle, Energy and Location polling plus command discovery.",
+        "de": "Erweiterter Starter-Adapter mit Connected-Vehicle-, Energy- und Location-Polling sowie Command-Discovery."
+      }
+    },
+    "titleLang": {
+      "en": "Volvo Connected Vehicle API (starter)",
+      "de": "Volvo Connected Vehicle API (Starter)"
+    },
+    "desc": {
+      "en": "Starter adapter for Volvo official APIs",
+      "de": "Starter-Adapter f\u00fcr offizielle Volvo-APIs"
+    },
+    "authors": [
+      "OpenAI"
+    ],
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    },
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "icon": "volvo.png",
+    "enabled": true,
+    "extIcon": "",
+    "readme": "https://developer.volvocars.com/apis/connected-vehicle/v2/overview/",
+    "type": "vehicle",
+    "compact": true,
+    "connectionType": "cloud",
+    "dataSource": "poll",
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=5.0.0"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=6.0.0"
+      }
+    ]
+  },
+  "native": {
+    "apiKey": "",
+    "clientId": "",
+    "clientSecret": "",
+    "accessToken": "",
+    "refreshToken": "",
+    "authCode": "",
+    "redirectUri": "",
+    "codeVerifier": "",
+    "vin": "",
+    "pollIntervalSec": 300,
+    "slowCycleCount": 12,
+    "engineStartRuntimeMinutes": 10,
+    "includeRawJson": true,
+    "enableEnergy": true,
+    "enableLocation": true
+  },
+  "objects": [],
+  "instanceObjects": []
+}

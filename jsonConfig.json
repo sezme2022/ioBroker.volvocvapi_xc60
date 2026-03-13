@@ -1,0 +1,102 @@
+{
+  "i18n": true,
+  "type": "panel",
+  "items": {
+    "tabs": {
+      "type": "tabs",
+      "items": {
+        "api": {
+          "label": "API / Auth",
+          "items": {
+            "apiKey": {
+              "type": "text",
+              "label": "VCC API key",
+              "sm": 12
+            },
+            "clientId": {
+              "type": "text",
+              "label": "Client ID",
+              "sm": 6
+            },
+            "clientSecret": {
+              "type": "password",
+              "label": "Client secret",
+              "sm": 6
+            },
+            "accessToken": {
+              "type": "password",
+              "label": "Access token (optional if refresh token is used)",
+              "sm": 12
+            },
+            "refreshToken": {
+              "type": "password",
+              "label": "Refresh token",
+              "sm": 12
+            },
+            "authCode": {
+              "type": "password",
+              "label": "Authorization code (one-time exchange)",
+              "sm": 12
+            },
+            "redirectUri": {
+              "type": "text",
+              "label": "Redirect URI",
+              "sm": 8
+            },
+            "codeVerifier": {
+              "type": "password",
+              "label": "PKCE code_verifier (if required)",
+              "sm": 4
+            }
+          }
+        },
+        "vehicle": {
+          "label": "Vehicle / Polling",
+          "items": {
+            "vin": {
+              "type": "text",
+              "label": "VIN (optional, auto-detect if empty)",
+              "sm": 6
+            },
+            "pollIntervalSec": {
+              "type": "number",
+              "label": "Poll interval in seconds",
+              "min": 300,
+              "max": 3600,
+              "sm": 3
+            },
+            "slowCycleCount": {
+              "type": "number",
+              "label": "Every N polls fetch slow endpoints",
+              "min": 1,
+              "max": 144,
+              "sm": 3
+            },
+            "engineStartRuntimeMinutes": {
+              "type": "number",
+              "label": "Engine start runtime minutes",
+              "min": 1,
+              "max": 60,
+              "sm": 4
+            },
+            "enableEnergy": {
+              "type": "checkbox",
+              "label": "Enable Energy API polling",
+              "sm": 4
+            },
+            "enableLocation": {
+              "type": "checkbox",
+              "label": "Enable Location API polling",
+              "sm": 4
+            },
+            "includeRawJson": {
+              "type": "checkbox",
+              "label": "Store raw JSON responses",
+              "sm": 4
+            }
+          }
+        }
+      }
+    }
+  }
+}
