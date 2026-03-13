@@ -2,7 +2,7 @@
 
 Ein eigener ioBroker-Adapter für die **Volvo Connected Vehicle API**, **Energy API** und **Location API**.
 
-Der Adapter ist für deinen **Volvo XC60 Plug-in-Hybrid, Baujahr 2024** vorbereitet, funktioniert aber grundsätzlich auch für andere kompatible Volvo-Modelle, sofern die entsprechenden Volvo-APIs und Scopes verfügbar sind.
+Der Adapter ist für den **Volvo XC60 Plug-in-Hybrid, Baujahr 2024** vorbereitet, funktioniert aber grundsätzlich auch für andere kompatible Volvo-Modelle, sofern die entsprechenden Volvo-APIs und Scopes verfügbar sind.
 
 ## Enthaltene Funktionen
 
@@ -62,44 +62,7 @@ LICENSE
 volvo.png
 ```
 
-## GitHub für Einsteiger: so arbeitest du damit
 
-### 1. Repository lokal vorbereiten
-
-Entpacke den Ordner lokal auf deinem Mac und öffne das Terminal **im Projektordner**.
-
-### 2. Erstes Hochladen nach GitHub
-
-Falls dein Repository schon existiert, verwende diese Befehle:
-
-```bash
-git init
-git branch -M main
-git remote remove origin 2>/dev/null || true
-git remote add origin https://github.com/sezme2022/ioBroker.volvocvapi_xc60.git
-git add .
-git commit -m "Version 0.3.0 - complete adapter structure"
-git push -u origin main
-```
-
-### 3. Spätere Änderungen versionieren
-
-Wenn du später einzelne Dateien änderst, reicht immer:
-
-```bash
-git add .
-git commit -m "Kurze Beschreibung der Änderung"
-git push
-```
-
-### 4. GitHub im Browser prüfen
-
-Nach dem Push solltest du im Repository direkt alle Dateien sehen. Wichtig sind besonders:
-
-- `package.json`
-- `io-package.json`
-- `main.js`
-- `admin/jsonConfig.json`
 
 ## Installation in ioBroker aus GitHub
 
@@ -111,21 +74,7 @@ iobroker url https://github.com/sezme2022/ioBroker.volvocvapi_xc60.git --host 7f
 
 Wenn bereits eine ältere Version installiert ist, kannst du nach dem neuen Push einfach denselben Befehl erneut ausführen.
 
-## Alternative: nur einzelne Dateien austauschen
 
-Wenn du nicht sofort mit Git arbeiten willst, kannst du auch nur diese Dateien ersetzen:
-
-- `main.js`
-- `io-package.json`
-- `package.json`
-- `admin/jsonConfig.json`
-- optional den ganzen `lib`-Ordner
-
-Danach den Adapter erneut aus GitHub installieren oder lokal neu deployen.
-
-## Wichtiger Hinweis zu Docker
-
-In deinem Docker-Setup solltest du **nicht** `iobroker upload all` verwenden. Die Installation über GitHub oder eine saubere lokale Installation ist in deinem Fall der bessere Weg.
 
 ## Typischer Testablauf nach der Installation
 
@@ -146,17 +95,6 @@ In deinem Docker-Setup solltest du **nicht** `iobroker upload all` verwenden. Di
 - `volvocvapi_xc60.0.availableCommands.*`
 - `volvocvapi_xc60.0.commandsLastResult.*`
 
-## Wenn du manuell Dateien austauschen willst
-
-### Nur im GitHub-Repository im Browser
-
-1. Repository öffnen
-2. Datei anklicken
-3. Stift-Symbol wählen
-4. Inhalt ersetzen
-5. unten `Commit changes`
-
-Das geht auch ohne lokale Git-Kenntnisse. Für mehrere Dateien ist Upload per Browser ebenfalls möglich.
 
 ## Nächste sinnvolle Ausbaustufen
 
